@@ -2,6 +2,7 @@ import { Hono, type Context, type Next } from 'hono'
 import { cors } from 'hono/cors'
 import type { Env, AuthedVars } from './types'
 import { hashPassword, verifyPassword, randomToken, newUserId, validUsername, validPassword } from './auth'
+import { handleTts } from './tts'
 
 type Vars = Partial<AuthedVars>
 type AppEnv = { Bindings: Env; Variables: Vars }
@@ -272,6 +273,9 @@ app.post('/api/tests', requireAuth, async (c) => {
     .run()
   return c.json({ id, completedAt: now })
 })
+
+// ---------- text-to-speech (Azure Neural TTS, R2-cached) ----------
+app.get('/api/tts', requireAuth, handleTts)
 
 app.get('/api/health', (c) => c.json({ ok: true }))
 
