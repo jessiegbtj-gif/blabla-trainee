@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+:root {
+  color-scheme: light;
+  --paper: #f4f5ef;
+  --surface: #ffffff;
+  --surface-2: #e9ebe1;
+  --ink: #22203c;
+  --ink-secondary: #5b5875;
+  --ink-muted: #8b889e;
+  --border: rgba(34, 32, 60, 0.12);
+  --accent: #21918c;
+  --accent-strong: #166f6b;
+  --accent-ink: #ffffff;
+  --accent-soft: #dceeee;
+  --speaking: #21918c;
+  --listening: #5b6ee8;
+  --good: #0ca30c;
+  --good-soft: rgba(12, 163, 12, 0.12);
+  --warning: #b97a00;
+  --warning-soft: rgba(185, 122, 0, 0.14);
+  --critical: #d03b3b;
+  --critical-soft: rgba(208, 59, 59, 0.12);
+  --shadow: 0 1px 2px rgba(34, 32, 60, 0.06), 0 10px 26px -14px rgba(34, 32, 60, 0.22);
+  --font-display: 'Fraunces', 'Songti SC', serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --paper: #14151c;
+    --surface: #1d1e29;
+    --surface-2: #262838;
+    --ink: #f1f0f7;
+    --ink-secondary: #b7b4cc;
+    --ink-muted: #83809c;
+    --border: rgba(241, 240, 247, 0.12);
+    --accent: #3fc0ba;
+    --accent-strong: #59d2cc;
+    --accent-ink: #06201e;
+    --accent-soft: rgba(63, 192, 186, 0.18);
+    --speaking: #3fc0ba;
+    --listening: #8993f0;
+    --good-soft: rgba(12, 163, 12, 0.2);
+    --warning: #fab219;
+    --warning-soft: rgba(250, 178, 25, 0.18);
+    --critical: #e66767;
+    --critical-soft: rgba(230, 103, 103, 0.18);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 14px 30px -16px rgba(0, 0, 0, 0.65);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 11px;
+}
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+textarea {
+  resize: vertical;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+p {
+  margin: 0;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

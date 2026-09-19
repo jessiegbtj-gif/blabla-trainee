@@ -1,0 +1,22 @@
+name = "pte-trainee"
+main = "worker/index.ts"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static frontend build output, served for any request that isn't /api/*
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+# Create with: npx wrangler d1 create pte_trainee
+# then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "pte_trainee"
+database_id = "e61014ed-e849-4c2f-b42a-a653cc430002"
+
+# Custom domain (set up in the Cloudflare dashboard under
+# Workers & Pages -> pte-trainee -> Settings -> Domains & Routes,
+# after registering the DNS record for pte.junowren.com).
+# No route config needed here when using "Connect to Git" + custom domain
+# through the dashboard, as described in DEPLOY.md.
