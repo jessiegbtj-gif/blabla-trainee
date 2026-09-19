@@ -20,3 +20,8 @@ database_id = "e61014ed-e849-4c2f-b42a-a653cc430002"
 # after registering the DNS record for pte.junowren.com).
 # No route config needed here when using "Connect to Git" + custom domain
 # through the dashboard, as described in DEPLOY.md.
+
+routes = [
+  { pattern = "blabla-trainee.junowren.com", custom_domain = true }
+]
+
