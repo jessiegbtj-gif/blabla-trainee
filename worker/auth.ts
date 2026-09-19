@@ -1,8 +1,9 @@
+
 // Password hashing (PBKDF2-SHA256 via Web Crypto, no Node crypto needed) and
 // opaque bearer session tokens. No email/phone is ever collected — only a
 // username the person picks themselves and a password they set.
 
-const PBKDF2_ITERATIONS = 150_000
+const PBKDF2_ITERATIONS = 100_000
 
 function bufToHex(buf: ArrayBuffer | Uint8Array): string {
   const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf)
