@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useApp } from '../hooks/AppDataContext'
 import { useUi } from '../hooks/UiContext'
-import { speak, speakSequence } from '../lib/tts'
+import { speak, speakSequence, stop as stopSpeech } from '../lib/tts'
 import { getSrsEntry } from '../lib/srs'
 import { genId } from '../lib/id'
 import { showToast } from '../lib/toast'
@@ -16,6 +16,7 @@ export default function PracticeView({ active, jumpToQid, onJumped }: { active: 
   const [index, setIndex] = useState(0)
   const [showZh, setShowZh] = useState(true)
   const [slow, setSlow] = useState(false)
+  const [autoPlay, setAutoPlay] = useState(false)
   const [addVocabOpenFor, setAddVocabOpenFor] = useState<string | null>(null)
   const [newTerm, setNewTerm] = useState('')
   const [newZh, setNewZh] = useState('')
@@ -50,6 +51,22 @@ export default function PracticeView({ active, jumpToQid, onJumped }: { active: 
       setIndex(next)
     }
   }
+
+  // "连续磨耳朵" (hands-free listening) mode: once a question finishes
+  // reading, automatically move on to the next one and keep reading, with
+  // no taps needed -- handy for listening while doing something else.
+  useEffect(() => {
+    if (!autoPlay || !active || !q) return
+    let cancelled = false
+    speakSequence(q.sentences.map((s) => s.en), slow).then(() => {
+      if (!cancelled) goNext()
+    })
+    return () => {
+      cancelled = true
+      stopSpeech()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPlay, active, q?.id, slow])
 
   return (
     <div className={`flex flex-col gap-[14px] ${active ? '' : 'hidden'}`}>
@@ -101,7 +118,10 @@ export default function PracticeView({ active, jumpToQid, onJumped }: { active: 
                   key={i}
                   className="flex cursor-pointer items-start gap-[10px] rounded-[14px] p-[10px_12px]"
                   style={{ background: 'var(--paper)', border: '1px solid var(--border)' }}
-                  onClick={() => speak(s.en, { slow })}
+                  onClick={() => {
+                    if (autoPlay) setAutoPlay(false)
+                    speak(s.en, { slow })
+                  }}
                 >
                   <button
                     aria-label="朗读"
@@ -131,7 +151,17 @@ export default function PracticeView({ active, jumpToQid, onJumped }: { active: 
               <ChipBtn active={slow} onClick={() => setSlow((v) => !v)}>
                 🐢 慢速
               </ChipBtn>
-              <ChipBtn onClick={() => speakSequence(q.sentences.map((s) => s.en), slow)}>▶️ 整段朗读</ChipBtn>
+              <ChipBtn
+                onClick={() => {
+                  if (autoPlay) setAutoPlay(false)
+                  speakSequence(q.sentences.map((s) => s.en), slow)
+                }}
+              >
+                ▶️ 整段朗读
+              </ChipBtn>
+              <ChipBtn active={autoPlay} onClick={() => setAutoPlay((v) => !v)}>
+                {autoPlay ? '⏸ 停止磨耳朵' : '🎧 连续磨耳朵'}
+              </ChipBtn>
             </div>
 
             <div className="flex flex-col gap-[10px] pt-[14px]" style={{ borderTop: '1px solid var(--border)' }}>
@@ -187,7 +217,10 @@ export default function PracticeView({ active, jumpToQid, onJumped }: { active: 
                         <button
                           className="flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full text-[12px]"
                           style={{ background: 'var(--accent-soft)', color: 'var(--accent-strong)' }}
-                          onClick={() => speak(v.term)}
+                          onClick={() => {
+                            if (autoPlay) setAutoPlay(false)
+                            speak(v.term)
+                          }}
                         >
                           🔈
                         </button>
